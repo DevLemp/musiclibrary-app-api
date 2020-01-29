@@ -1,2 +1,2 @@
-# recipe-app-api
-Recipe app API source code.
+# MusicLibrary-app-api
+MusicLibrary app API source code.
