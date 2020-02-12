@@ -34,9 +34,18 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'email'
 
-class Track(models.Model):
-    title = models.CharField(max_length=255)
-    artist = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,)
+class Genre(models.Model):
+    """Genre of the track"""
+    name = models.CharField(max_length=255)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, )
 
     def __str__(self):
-        return self.title
+        return self.name
+
+class Track(models.Model):
+    name = models.CharField(max_length=255)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,)
+    genre = models.ForeignKey(Genre, null=True, on_delete=models.SET_NULL,)
+
+    def __str__(self):
+        return self.name

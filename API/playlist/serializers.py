@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from core.models import Track
+from core.models import Track, Genre
 
 
 class TrackSerializer(serializers.ModelSerializer):
@@ -8,5 +8,14 @@ class TrackSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Track
-        fields = ('id', 'title')
+        fields = ('id', 'name')
+        read_only_fields = ('id',)
+
+
+class GenreSerializer(serializers.ModelSerializer):
+    """Serializer for genre object"""
+
+    class Meta:
+        model = Genre
+        fields = ('id', 'name')
         read_only_fields = ('id',)

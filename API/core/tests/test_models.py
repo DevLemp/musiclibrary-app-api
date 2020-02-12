@@ -37,11 +37,20 @@ class ModelTests(TestCase):
         self.assertTrue(user.is_superuser)
         self.assertTrue(user.is_staff)
 
-    def test_tag_str(self):
-        """Test the tag string representation"""
-        tag = models.Track.objects.create(
-            artist=sample_user(),
-            title='Sylia'
+    def test_track_str(self):
+        """Test the track string representation"""
+        track = models.Track.objects.create(
+                user=sample_user(),
+                name='Sylia'
             )
 
-        self.assertEqual(str(tag), tag.title)
+        self.assertEqual(str(track), track.name)
+
+    def test_genre_str(self):
+        """Test the genre string representation"""
+        genre = models.Genre.objects.create(
+            user=sample_user(),
+            name='House'
+        )
+
+        self.assertEqual(str(genre), genre.name)

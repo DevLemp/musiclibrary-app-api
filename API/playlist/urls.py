@@ -6,6 +6,7 @@ from playlist import views
 
 router = DefaultRouter()
 router.register('tracks', views.TrackViewSet)
+router.register('ingredients', views.GenreViewSet)
 
 app_name = 'playlist'
 

@@ -39,12 +39,12 @@ class PrivateTracksApiTests(TestCase):
 
     def test_retrieve_tracks(self):
         """Test retrieving tracks"""
-        Track.objects.create(artist=self.user, title='Sylia')
-        Track.objects.create(artist=self.user, title='Hayk')
+        Track.objects.create(user=self.user, name='Sylia')
+        Track.objects.create(user=self.user, name='Hayk')
 
         res = self.client.get(TRACKS_URL)
 
-        tracks = Track.objects.all().order_by('-title')
+        tracks = Track.objects.all().order_by('-name')
         serializer = TrackSerializer(tracks, many=True)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, serializer.data)
@@ -55,29 +55,29 @@ class PrivateTracksApiTests(TestCase):
             'other@londonappdev.com',
             'testpass'
         )
-        Track.objects.create(artist=user2, title='Boom')
-        track = Track.objects.create(artist=self.user, title='Shadows')
+        Track.objects.create(user=user2, name='Boom')
+        track = Track.objects.create(user=self.user, name='Shadows')
 
         res = self.client.get(TRACKS_URL)
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(len(res.data), 1)
-        self.assertEqual(res.data[0]['title'], track.title)
+        self.assertEqual(res.data[0]['name'], track.name)
 
     def test_create_tag_successful(self):
         """Test creating a new tag"""
-        payload = {'title': 'Hit and Run'}
+        payload = {'name': 'Hit and Run'}
         self.client.post(TRACKS_URL, payload)
 
         exists = Track.objects.filter(
-            artist=self.user,
-            title=payload['title']
+            user=self.user,
+            name=payload['name']
         ).exists()
         self.assertTrue(exists)
 
     def test_create_tag_invalid(self):
         """Test creating a new tag with invalid payload"""
-        payload = {'title': ''}
+        payload = {'name': ''}
         res = self.client.post(TRACKS_URL, payload)
 
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
