@@ -63,3 +63,21 @@ class PrivateTracksApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(len(res.data), 1)
         self.assertEqual(res.data[0]['title'], track.title)
+
+    def test_create_tag_successful(self):
+        """Test creating a new tag"""
+        payload = {'title': 'Hit and Run'}
+        self.client.post(TRACKS_URL, payload)
+
+        exists = Track.objects.filter(
+            artist=self.user,
+            title=payload['title']
+        ).exists()
+        self.assertTrue(exists)
+
+    def test_create_tag_invalid(self):
+        """Test creating a new tag with invalid payload"""
+        payload = {'title': ''}
+        res = self.client.post(TRACKS_URL, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)

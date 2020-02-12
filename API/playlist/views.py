@@ -7,7 +7,7 @@ from core.models import Track
 from playlist import serializers
 
 
-class TrackViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
+class TrackViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin):
     """Manage tracks in the database"""
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
@@ -17,3 +17,7 @@ class TrackViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
     def get_queryset(self):
         """Return objects for the current authenticated user only"""
         return self.queryset.filter(artist=self.request.user).order_by('-title')
+
+    def perform_create(self, serializer):
+        """Create a new track"""
+        serializer.save(artist=self.request.user)
